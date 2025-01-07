@@ -3,6 +3,7 @@ import pygame
 # pygame setup
 pygame.init()
 pygame.font.init()
+pygame.display.set_caption("Pong")
 screen = pygame.display.set_mode((1280, 720), flags=pygame.SCALED, vsync=1)
 clock = pygame.time.Clock()
 running = True
@@ -11,6 +12,8 @@ my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 player1_score = 0
 player2_score = 0
+
+paddle_speed = 500
 
 paddle_height = 200
 paddle_width = 30
@@ -77,20 +80,22 @@ while running:
             ball_direction_y = -1
         if ball_pos_x <= 10 + paddle_width + 25 and paddle_a_top <= ball_pos_y <= paddle_a_top + paddle_height:
             ball_direction_x = 1
+            ball_speed += 50
         if ball_pos_x >= screen.get_width() - 10 - paddle_width - 25 and paddle_b_top <= ball_pos_y <= paddle_b_top + paddle_height:
             ball_direction_x = -1
+            ball_speed += 50
         if ball_pos_x - 25 <= 0:
             player2_score += 1
-            print(player2_score)
             ball_pos_x = screen.get_width() / 2
             ball_pos_y = screen.get_height() / 2
             ball_direction_x = 1
+            ball_speed = 300
         if ball_pos_x + 25 >= screen.get_width():
             player1_score += 1
-            print(player1_score)
             ball_pos_x = screen.get_width() / 2
             ball_pos_y = screen.get_height() / 2
             ball_direction_x = -1
+            ball_speed = 300
 
         ball_pos_x += ball_speed * dt * ball_direction_x
         ball_pos_y += ball_speed * dt * ball_direction_y
@@ -100,23 +105,23 @@ while running:
             if paddle_a_top <= 0:
                 paddle_a_top = 0
             else:
-                paddle_a_top -= 300 * dt
+                paddle_a_top -= paddle_speed * dt
         if keys[pygame.K_s]:
             if paddle_a_top >= screen.get_height() - paddle_height:
                 paddle_a_top = screen.get_height() - paddle_height
             else:
-                paddle_a_top += 300 * dt
+                paddle_a_top += paddle_speed * dt
         if not single_player:
             if keys[pygame.K_UP]:
                 if paddle_b_top <= 0:
                     paddle_b_top = 0
                 else:
-                    paddle_b_top -= 300 * dt
+                    paddle_b_top -= paddle_speed * dt
             if keys[pygame.K_DOWN]:
                 if paddle_b_top >= screen.get_height() - paddle_height:
                     paddle_b_top = screen.get_height() - paddle_height
                 else:
-                    paddle_b_top += 300 * dt
+                    paddle_b_top += paddle_speed * dt
         else:
             if ball_pos_y < paddle_b_top + paddle_height / 2:
                 if paddle_b_top <= 0:
