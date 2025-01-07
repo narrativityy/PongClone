@@ -3,10 +3,12 @@ import pygame
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+pygame.font.init()
+screen = pygame.display.set_mode((1280, 720), flags=pygame.SCALED, vsync=1)
 clock = pygame.time.Clock()
 running = True
 dt = 0
+my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 player1_score = 0
 player2_score = 0
@@ -38,7 +40,10 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
-    pygame
+    player1_score_text = my_font.render("Player 1: " + str(player1_score), False, "white")
+    player2_score_text = my_font.render("Player 2: " + str(player2_score), False, "white")
+    screen.blit(player1_score_text, (10, 10))
+    screen.blit(player2_score_text, (screen.get_width() - player2_score_text.get_width() - 10, 10))
 
     pygame.draw.rect(screen, "green", (paddle_a_left, paddle_a_top, paddle_width, paddle_height), 0, 10)
     pygame.draw.rect(screen, 'red', (paddle_b_left, paddle_b_top, paddle_width, paddle_height), 0, 10)
