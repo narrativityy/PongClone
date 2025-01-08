@@ -82,10 +82,18 @@ while running:
         if ball_pos_y + 25 >= screen.get_height():
             ball_direction_y = -1
         if ball_pos_x <= 10 + paddle_width + 25 and paddle_a_top <= ball_pos_y <= paddle_a_top + paddle_height:
+            if ball_pos_y >= paddle_a_top + paddle_height / 2:
+                ball_direction_y = 1
+            else:
+                ball_direction_y = -1
             ball_direction_x = 1
             ball_speed += 50
             ai_speed += 40
         if ball_pos_x >= screen.get_width() - 10 - paddle_width - 25 and paddle_b_top <= ball_pos_y <= paddle_b_top + paddle_height:
+            if ball_pos_y >= paddle_b_top + paddle_height / 2:
+                ball_direction_y = 1
+            else:
+                ball_direction_y = -1
             ball_direction_x = -1
             ball_speed += 50
             ai_speed += 40
