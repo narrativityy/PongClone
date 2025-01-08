@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # pygame setup
 pygame.init()
@@ -35,6 +36,8 @@ ball_direction_y = 1
 single_player = False
 single_player_button_color = "red"
 
+ai_speed = 250
+
 paused = False
 
 while running:
@@ -65,7 +68,7 @@ while running:
     pygame.draw.rect(screen, "green", (paddle_a_left, paddle_a_top, paddle_width, paddle_height), 0, 10)
     pygame.draw.rect(screen, 'red', (paddle_b_left, paddle_b_top, paddle_width, paddle_height), 0, 10)
 
-    pygame.draw.circle(screen, "white", (ball_pos_x, ball_pos_y), 25)
+    pygame.draw.circle(screen, 'white', (ball_pos_x, ball_pos_y), 25)
 
     button_text = my_font.render("Single Player", True, single_player_button_color)
     screen.blit(button_text, (screen.get_width() - 10 - button_text.get_width(), screen.get_height() - 10 - button_text.get_height()))
@@ -81,21 +84,25 @@ while running:
         if ball_pos_x <= 10 + paddle_width + 25 and paddle_a_top <= ball_pos_y <= paddle_a_top + paddle_height:
             ball_direction_x = 1
             ball_speed += 50
+            ai_speed += 40
         if ball_pos_x >= screen.get_width() - 10 - paddle_width - 25 and paddle_b_top <= ball_pos_y <= paddle_b_top + paddle_height:
             ball_direction_x = -1
             ball_speed += 50
+            ai_speed += 40
         if ball_pos_x - 25 <= 0:
             player2_score += 1
             ball_pos_x = screen.get_width() / 2
             ball_pos_y = screen.get_height() / 2
             ball_direction_x = 1
             ball_speed = 300
+            ai_speed = 200
         if ball_pos_x + 25 >= screen.get_width():
             player1_score += 1
             ball_pos_x = screen.get_width() / 2
             ball_pos_y = screen.get_height() / 2
             ball_direction_x = -1
             ball_speed = 300
+            ai_speed = 200
 
         ball_pos_x += ball_speed * dt * ball_direction_x
         ball_pos_y += ball_speed * dt * ball_direction_y
@@ -127,12 +134,18 @@ while running:
                 if paddle_b_top <= 0:
                     paddle_b_top = 0
                 else:
-                    paddle_b_top -= 200 * dt
+                    if ai_speed <= 600:
+                        paddle_b_top -= ai_speed * dt
+                    else:
+                        paddle_b_top -= 600 * dt
             if ball_pos_y > paddle_b_top + paddle_height / 2:
                 if paddle_b_top >= screen.get_height() - paddle_height:
                     paddle_b_top = screen.get_height() - paddle_height
                 else:
-                    paddle_b_top += 200 * dt
+                    if ai_speed <= 600:
+                        paddle_b_top += ai_speed * dt
+                    else:
+                        paddle_b_top += 600 * dt
     else:
         pygame.draw.rect(screen, "white", (screen.get_width() / 2 - 30, screen.get_height() / 2 - 100, 50, 200), 0, 10)
         pygame.draw.rect(screen, "white", (screen.get_width() / 2 + 30, screen.get_height() / 2 - 100, 50, 200), 0, 10)
